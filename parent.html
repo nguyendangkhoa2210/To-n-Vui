@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Bảng Điều Khiển Phụ Huynh — theo dõi tiến độ học Toán của con, đặt giới hạn giờ học, khoá khối lớp.">
+    <title>Bảng Điều Khiển Phụ Huynh — Toán Vui Cùng Bống</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="parent.css">
+    <link rel="icon" href="icon.svg" type="image/svg+xml">
+    <meta name="theme-color" content="#3f7a43">
+</head>
+<body class="pd-body">
+
+    <!-- ===== TOP BAR ===== -->
+    <div class="pd-topbar">
+        <a class="pd-brand" href="parent.html">
+            <div class="pd-brand-leaf">🌿</div>
+            <div class="pd-brand-text">
+                <div class="pd-name">Toán Vui Cùng Bống</div>
+                <div class="pd-tag">Bảng điều khiển phụ huynh</div>
+            </div>
+        </a>
+        <div class="pd-topbar-right">
+            <div class="pd-user-widget" id="pd-user-widget" style="display:none;">
+                <div class="pd-user-chip" id="pd-user-chip">
+                    <div class="pd-av" id="pd-user-av">?</div>
+                    <div class="pd-label" id="pd-user-label">…</div>
+                </div>
+                <div class="pd-user-dropdown" id="pd-user-dropdown">
+                    <button type="button" id="pd-logout-btn">Đăng xuất</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== TRẠNG THÁI ĐANG TẢI / LỖI PHIÊN ĐĂNG NHẬP ===== -->
+    <div class="pd-loading" id="pd-loading">⏳ Đang tải Bảng Điều Khiển…</div>
+    <div class="pd-fatal" id="pd-fatal" style="display:none;"></div>
+
+    <!-- ===== NỘI DUNG CHÍNH (hiện sau khi xác thực là Phụ Huynh) ===== -->
+    <div class="pd-page" id="pd-page" style="display:none;">
+
+        <!-- ---------- VIEW: DANH SÁCH CÁC CON ---------- -->
+        <section id="pd-view-list">
+            <div class="pd-list-head">
+                <div>
+                    <h1>👨‍👩‍👧 Các con của bạn</h1>
+                    <p id="pd-list-sub">Bấm vào 1 con để xem chi tiết tiến độ và cài đặt.</p>
+                </div>
+                <button type="button" class="pd-btn-primary" id="pd-open-create-btn">+ Tạo Tài Khoản Cho Con</button>
+            </div>
+            <div class="pd-card-grid" id="pd-card-grid">
+                <!-- Các thẻ con được render bằng parent.js -->
+            </div>
+        </section>
+
+        <!-- ---------- VIEW: CHI TIẾT 1 CON (ẩn mặc định) ---------- -->
+        <section id="pd-view-detail" style="display:none;">
+            <button type="button" class="pd-back-btn" id="pd-back-btn">← Quay lại danh sách các con</button>
+            <div id="pd-detail-content"><!-- Nội dung chi tiết render bằng parent.js --></div>
+        </section>
+
+    </div>
+
+    <!-- ===== PANEL: TẠO / LIÊN KẾT TÀI KHOẢN CON (modal nhỏ) ===== -->
+    <div class="pd-panel-backdrop" id="pd-panel-backdrop">
+        <div class="pd-panel">
+            <button type="button" class="pd-panel-close" id="pd-panel-close" aria-label="Đóng">✕</button>
+
+            <div class="pd-panel-tabs">
+                <button type="button" class="pd-panel-tab active" data-panel-mode="create">Tạo mới</button>
+                <button type="button" class="pd-panel-tab" data-panel-mode="link">Liên kết đã có</button>
+            </div>
+
+            <!-- Tạo tài khoản mới cho con -->
+            <form id="pd-create-form">
+                <h3>Tạo tài khoản cho con</h3>
+                <p class="pd-panel-sub">Bạn tự đặt tên đăng nhập &amp; mật khẩu cho con — tài khoản tự động liên kết với bạn ngay, con dùng đúng thông tin này để vào học.</p>
+                <div class="pd-panel-error" id="pd-create-error"></div>
+                <div class="pd-field">
+                    <label for="pd-create-display">Tên hiển thị của con</label>
+                    <input type="text" id="pd-create-display" maxlength="100" placeholder="VD: Bé Bống" required autocomplete="off">
+                </div>
+                <div class="pd-field">
+                    <label for="pd-create-username">Tên đăng nhập cho con</label>
+                    <input type="text" id="pd-create-username" maxlength="30" placeholder="VD: bebong01" required autocomplete="off">
+                </div>
+                <div class="pd-field">
+                    <label for="pd-create-password">Mật khẩu cho con</label>
+                    <input type="password" id="pd-create-password" placeholder="Tối thiểu 4 ký tự" required autocomplete="off">
+                </div>
+                <button type="submit" class="pd-btn-primary" style="width:100%;">Tạo Tài Khoản</button>
+            </form>
+
+            <!-- Liên kết tài khoản học sinh đã có sẵn -->
+            <form id="pd-link-form" style="display:none;">
+                <h3>Liên kết tài khoản đã có</h3>
+                <p class="pd-panel-sub">Dành cho tài khoản học sinh con đã tự có từ trước. Cần đúng mật khẩu của con để xác nhận.</p>
+                <div class="pd-panel-error" id="pd-link-error"></div>
+                <div class="pd-field">
+                    <label for="pd-link-username">Tên đăng nhập của con</label>
+                    <input type="text" id="pd-link-username" required autocomplete="off">
+                </div>
+                <div class="pd-field">
+                    <label for="pd-link-password">Mật khẩu của con</label>
+                    <input type="password" id="pd-link-password" required autocomplete="off">
+                </div>
+                <button type="submit" class="pd-btn-primary" style="width:100%;">Liên Kết</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="pd-toast" id="pd-toast"></div>
+
+    <script src="parent.js"></script>
+</body>
+</html>

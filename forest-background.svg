@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f4faee"/>
+      <stop offset="1" stop-color="#e7f4df"/>
+    </linearGradient>
+    <linearGradient id="hillBack" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#d4eac9"/>
+      <stop offset="1" stop-color="#c4dfb9"/>
+    </linearGradient>
+    <linearGradient id="hillFront" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#b6d8a8"/>
+      <stop offset="1" stop-color="#a6ce99"/>
+    </linearGradient>
+    <filter id="soft" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="18"/>
+    </filter>
+  </defs>
+
+  <rect width="1600" height="900" fill="url(#sky)"/>
+
+  <!-- soft clearing -->
+  <ellipse cx="820" cy="430" rx="520" ry="255" fill="#fffdf6" opacity=".58" filter="url(#soft)"/>
+
+  <!-- distant hills -->
+  <path d="M0 510 C190 420 350 470 500 520 C650 570 780 455 930 470 C1110 490 1250 380 1425 450 C1515 485 1560 510 1600 530 L1600 900 L0 900 Z" fill="url(#hillBack)" opacity=".9"/>
+  <path d="M0 615 C170 545 330 550 490 610 C650 670 790 555 940 580 C1090 605 1260 535 1400 575 C1490 600 1550 635 1600 665 L1600 900 L0 900 Z" fill="url(#hillFront)" opacity=".85"/>
+
+  <!-- subtle tree line: left -->
+  <g opacity=".96">
+    <rect x="40" y="220" width="34" height="400" rx="14" fill="#805a3a"/>
+    <circle cx="75" cy="190" r="105" fill="#5e9e58"/>
+    <circle cx="150" cy="225" r="80" fill="#76af67"/>
+    <circle cx="5" cy="250" r="78" fill="#4f914f"/>
+    <circle cx="105" cy="300" r="86" fill="#6ca95e"/>
+
+    <rect x="155" y="300" width="24" height="300" rx="10" fill="#8a6442" opacity=".8"/>
+    <circle cx="170" cy="285" r="70" fill="#8fbc79" opacity=".95"/>
+  </g>
+
+  <!-- subtle tree line: right -->
+  <g opacity=".96">
+    <rect x="1505" y="215" width="36" height="405" rx="14" fill="#805a3a"/>
+    <circle cx="1530" cy="180" r="110" fill="#5b9954"/>
+    <circle cx="1450" cy="220" r="82" fill="#78ad67"/>
+    <circle cx="1595" cy="245" r="82" fill="#4e914d"/>
+    <circle cx="1510" cy="300" r="88" fill="#70a962"/>
+
+    <rect x="1415" y="315" width="24" height="290" rx="10" fill="#8a6442" opacity=".8"/>
+    <circle cx="1428" cy="290" r="67" fill="#94bd7e" opacity=".95"/>
+  </g>
+
+  <!-- leaves / small accents -->
+  <g fill="#6aa85f" opacity=".75">
+    <path d="M260 160 q24 -28 44 0 q-24 30 -44 0Z"/>
+    <path d="M1360 140 q22 -25 40 0 q-20 28 -40 0Z"/>
+    <path d="M330 690 q22 -24 38 0 q-20 26 -38 0Z"/>
+    <path d="M1260 670 q26 -28 44 0 q-24 28 -44 0Z"/>
+  </g>
+
+  <!-- flowers in the foreground -->
+  <g>
+    <circle cx="265" cy="735" r="7" fill="#f1c56c"/><circle cx="254" cy="724" r="10" fill="#fff2c5"/><circle cx="276" cy="724" r="10" fill="#fff2c5"/><circle cx="265" cy="713" r="10" fill="#fff2c5"/><circle cx="265" cy="725" r="4" fill="#e3a94f"/>
+    <circle cx="1340" cy="750" r="7" fill="#f1c56c"/><circle cx="1329" cy="739" r="10" fill="#fff2c5"/><circle cx="1351" cy="739" r="10" fill="#fff2c5"/><circle cx="1340" cy="728" r="10" fill="#fff2c5"/><circle cx="1340" cy="740" r="4" fill="#e3a94f"/>
+  </g>
+
+  <!-- tiny butterflies -->
+  <g fill="#e7b84f" opacity=".55">
+    <path d="M430 210 q18 -12 20 8 q-12 8 -20 -8 q-8 20 -20 8 q2 -20 20 -8Z"/>
+    <path d="M1180 245 q18 -12 20 8 q-12 8 -20 -8 q-8 20 -20 8 q2 -20 20 -8Z"/>
+  </g>
+
+  <!-- central soft horizon veil to preserve readability -->
+  <path d="M260 520 C500 455 690 490 820 500 C1000 515 1170 465 1340 515 L1340 900 L260 900 Z" fill="#ffffff" opacity=".14"/>
+</svg>
