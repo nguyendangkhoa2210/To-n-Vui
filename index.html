@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="description" content="Toán Vui Tiểu Học.">
+    <meta name="author" content="Toán Vui Team">
+    <title>Toán Vui Tiểu Học</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#4e9b55">
+    <link rel="icon" href="icon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="icon.svg">
+</head>
+<body>
+    <a href="#main-content" class="skip-to-content">Bỏ qua, đến nội dung chính</a>
+
+    <!-- ===== TOAST CONTAINER ===== -->
+    <div id="toast-container"></div>
+
+    <!-- ===== NAVBAR ===== -->
+    <nav class="navbar">
+        <div class="nav-left">
+            <button class="hamburger" id="hamburgerBtn" aria-label="Mở/Đóng menu">☰</button>
+            <div class="logo" onclick="showWelcome()">
+                <span class="logo-mascot" id="header-mascot"></span>
+                <div class="letters">
+                    <span>T</span><span>o</span><span>á</span><span>n</span>&nbsp;<span>V</span><span>u</span><span>i</span>
+                </div>
+            </div>
+        </div>
+        <div class="nav-title">Học Mà Chơi — Chơi Mà Học</div>
+        <div class="nav-actions">
+            <button class="nav-stats-btn" onclick="openForestBook()" id="forest-book-nav-btn" title="Sổ Rừng Xanh">🐾 <span class="nav-btn-label">Rừng Xanh</span> <span class="mu-ff-badge" id="forest-book-count">0/6</span></button>
+            <div class="nav-icon-group">
+                <button class="darkmode-btn" id="soundToggleBtn" onclick="toggleSound()" title="Bật/tắt âm thanh" aria-label="Bật hoặc tắt âm thanh phản hồi" aria-pressed="false">🔊</button>
+            </div>
+            <div class="mode-switch">
+                <button class="mode-btn active" id="modeLearnBtn" onclick="switchMode('learn')">📖 Học Công Thức</button>
+                <button class="mode-btn" id="modeQuizBtn" onclick="switchMode('quiz')">📝 Ôn Tập</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="app-container">
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-brand" onclick="showWelcome()">🏠 Trang Chủ</div>
+
+            <!-- SEARCH BAR -->
+            <div class="search-wrap" id="search-wrap-learn">
+                <input type="text" id="formula-search" placeholder="🔍 Tìm công thức..." autocomplete="off" oninput="handleSearch(this.value)">
+                <div class="search-results" id="search-results"></div>
+            </div>
+
+
+            <!-- ===== MENU CHẾ ĐỘ HỌC ===== -->
+            <!-- 5 nhóm Lớp 1 → Lớp 5 được curriculum.js dựng động tại đây, bám sách Kết Nối Tri Thức Với Cuộc Sống -->
+            <div id="menu-learn">
+                <!-- BOOKMARKS -->
+                <div class="menu-group" id="bookmark-group" style="display:none;">
+                    <div class="menu-header">⭐ Đã Đánh Dấu</div>
+                    <div class="recent-list" id="bookmark-list"></div>
+                </div>
+            </div>
+
+            <!-- ===== MENU CHẾ ĐỘ QUIZ ===== -->
+            <div id="menu-quiz" style="display:none;">
+                <div class="menu-group">
+                    <div class="menu-header" id="quiz-grade-menu-header">📝 Chọn Khối Lớp</div>
+                    <button class="menu-item quiz-select" data-grade="1" onclick="chooseLevel('lop1', this)">🐣 Ôn Tập Lớp 1</button>
+                    <div class="highscore-box" data-grade="1" id="highscore-lop1">Lớp 1: chưa có dữ liệu</div>
+                    <button class="menu-item quiz-select" data-grade="2" onclick="chooseLevel('lop2', this)">🐰 Ôn Tập Lớp 2</button>
+                    <div class="highscore-box" data-grade="2" id="highscore-lop2">Lớp 2: chưa có dữ liệu</div>
+                    <button class="menu-item quiz-select" data-grade="3" onclick="chooseLevel('lop3', this)">🐱 Ôn Tập Lớp 3</button>
+                    <div class="highscore-box" data-grade="3" id="highscore-lop3">Lớp 3: chưa có dữ liệu</div>
+                    <button class="menu-item quiz-select" data-grade="4" onclick="chooseLevel('lop4', this)">🦊 Ôn Tập Lớp 4</button>
+                    <div class="highscore-box" data-grade="4" id="highscore-lop4">Lớp 4: chưa có dữ liệu</div>
+                    <button class="menu-item quiz-select" data-grade="5" onclick="chooseLevel('lop5', this)">🦉 Ôn Tập Lớp 5</button>
+                    <div class="highscore-box" data-grade="5" id="highscore-lop5">Lớp 5: chưa có dữ liệu</div>
+                </div>
+            </div>
+        </aside>
+
+        <main class="workspace" id="main-content">
+
+            <!-- ================= CHẾ ĐỘ HỌC ================= -->
+            <div id="learn-panels">
+                <div id="welcome-screen" class="formula-panel active">
+                    <div class="welcome-hero">
+                        <div class="hero-blob hero-blob-1"></div>
+                        <div class="hero-blob hero-blob-2"></div>
+                        <div class="hero-mascot" id="hero-mascot"></div>
+                        <h1 class="hero-title">Chào Mừng Đến Với <span class="hero-brand">Toán Vui</span>!</h1>
+                        <p class="hero-subtitle" id="hero-greeting">Học toán không còn nhàm chán, gõ đáp án, và chinh phục từng khối lớp Tiểu Học nhé! 🚀</p>
+                        <div class="hero-quote" id="hero-quote">💡 "Toán học là ngôn ngữ mà vũ trụ dùng để viết chính nó."</div>
+                        <div class="streak-badge" id="streak-badge" style="display:none;">
+                            <span class="streak-fire">🔥</span>
+                            <span id="streak-count">0</span> ngày học liên tục
+                        </div>
+                    </div>
+
+                    <section class="daily-mission-card" aria-labelledby="daily-mission-title">
+                        <div class="daily-mission-art" aria-hidden="true">
+                            <span class="mission-leaf leaf-1">🍃</span>
+                            <span class="mission-leaf leaf-2">🍃</span>
+                            <span class="mission-dot dot-1"></span>
+                            <span class="mission-dot dot-2"></span>
+                            <img src="bear-mission.svg" alt="Gấu con" class="daily-mission-mascot">
+                        </div>
+                        <div class="daily-mission-main">
+                            <div class="daily-mission-kicker">🌿 NHIỆM VỤ HÔM NAY</div>
+                            <h2 id="daily-mission-title">Giúp Gấu con thu thập 5 chiếc lá</h2>
+                            <p id="daily-mission-desc">Trả lời 5 câu hỏi Toán phù hợp với lớp của bạn để hoàn thành nhiệm vụ.</p>
+                            <div class="daily-mission-progress" id="daily-mission-progress" role="progressbar" aria-valuemin="0" aria-valuemax="5" aria-valuenow="0" aria-label="Đã hoàn thành 0 trên 5 câu hỏi">
+                                <span class="mission-step">🍃</span>
+                                <span class="mission-line"></span>
+                                <span class="mission-step">🍃</span>
+                                <span class="mission-line"></span>
+                                <span class="mission-step">🍃</span>
+                                <span class="mission-line"></span>
+                                <span class="mission-step">🍃</span>
+                                <span class="mission-line"></span>
+                                <span class="mission-step">🍃</span>
+                            </div>
+                            <div class="daily-mission-status" id="daily-mission-status">Chưa bắt đầu · <strong>0 / 5 chiếc lá</strong></div>
+                        </div>
+                        <div class="daily-mission-reward">
+                            <div class="reward-title">Phần thưởng</div>
+                            <div class="reward-star" aria-hidden="true">★</div>
+                            <div class="reward-points">+10 điểm</div>
+                            <button type="button" class="daily-mission-btn" id="daily-mission-btn" onclick="startDailyMission()">BẮT ĐẦU NHIỆM VỤ <span aria-hidden="true">→</span></button>
+                        </div>
+                    </section>
+                </div>
+
+            </div>
+
+            <!-- ================= CHẾ ĐỘ QUIZ ================= -->
+            <div id="quiz-panels" style="display:none;">
+                <div id="quiz-intro" class="formula-panel active">
+                    <div class="welcome-box">
+                        <h1>📝 Khu Vực Ôn Tập Tổng Hợp</h1>
+                        <p>Chọn một khối lớp ở menu bên trái để bắt đầu 10 câu hỏi trộn từ tất cả bài học của lớp đó. Không giới hạn thời gian — tự làm bài, gõ đáp số, rồi bấm Xác Nhận để được chấm điểm ngay. Điểm cao nhất được lưu lại!</p>
+                        <div class="feature-badges">
+                            <span class="badge b-1">✦ 10 Câu / Bài</span>
+                            <span class="badge b-2">✦ Không Giới Hạn Thời Gian</span>
+                            <span class="badge b-3">✦ Lưu Điểm Cao</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="quiz-difficulty-select" class="formula-panel">
+                    <div class="welcome-box">
+                        <h1>Chọn Mức Độ Đề — <span id="difficulty-level-label">Lớp 1</span></h1>
+                        <p>Số liệu trong đề sẽ lớn hơn/khó hơn dần theo mức bạn chọn, nhưng vẫn đúng dạng bài đã học ở khối lớp này.</p>
+                        <div class="difficulty-buttons">
+                            <button class="calc-btn diff-btn diff-easy" onclick="promptStudentNameThenRun(() => startQuiz('easy'))">🟢 Dễ</button>
+                            <button class="calc-btn diff-btn diff-medium" onclick="promptStudentNameThenRun(() => startQuiz('medium'))">🟡 Trung Bình</button>
+                            <button class="calc-btn diff-btn diff-hard" onclick="promptStudentNameThenRun(() => startQuiz('hard'))">🔴 Khó</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="quiz-active" class="formula-panel">
+                    <div class="quiz-header">
+                        <span id="quiz-level-label">Lớp 1</span>
+                        <span id="quiz-progress">Câu 1 / 10</span>
+                        <span id="quiz-score">Điểm: 0</span>
+                    </div>
+                    <!-- Progress bar -->
+                    <div class="quiz-progress-bar">
+                        <div class="quiz-progress-fill" id="quiz-progress-fill" style="width:10%;"></div>
+                    </div>
+                    <!-- Timer: không dùng cho Tiểu học (luôn ẩn), giữ lại phần tử để không vỡ code -->
+                    <div class="quiz-timer-wrap" id="quiz-timer-wrap" style="display:none;">
+                        <div class="quiz-timer-label" id="quiz-timer-label">⏱️ 60s</div>
+                        <div class="quiz-timer-bar">
+                            <div class="quiz-timer-fill" id="quiz-timer-fill"></div>
+                        </div>
+                    </div>
+                    <div class="quiz-question" id="quiz-question">Đang tải câu hỏi...</div>
+                    <!-- F1: Nút đọc to đề bài -->
+                    <button id="quiz-read-btn" class="quiz-read-btn" style="display:none;" aria-label="Đọc to đề bài">
+                        🔊 Nghe đề
+                    </button>
+                    <div class="mu-practice-visual" id="quiz-visual"></div>
+                    <!-- F2: Chọn đáp án cho Lớp 1 & 2 (thay cho bộ đếm số trước đây) -->
+                    <div id="quiz-choice-row" class="mu-choice-row" style="display:none;"></div>
+                    <div class="input-area">
+                        <input type="number" step="any" id="quiz-answer-input" placeholder="Nhập đáp số của bạn">
+                    </div>
+                    <button class="calc-btn" id="quiz-submit-btn" onclick="submitQuizAnswer()"><span class="btn-icon">✓</span><span class="btn-label">Xác Nhận Đáp Án</span></button>
+                    <div class="output-box" id="quiz-feedback" style="display:none;"></div>
+                    <button class="calc-btn next-btn" id="quiz-next-btn" style="display:none;" onclick="nextQuizQuestion()"><span class="btn-label">Câu Tiếp Theo</span><span class="btn-icon">→</span></button>
+                </div>
+
+                <div id="quiz-result" class="formula-panel">
+                    <div class="welcome-box">
+                        <h1 id="quiz-result-title">🎉 Hoàn Thành Bài Kiểm Tra!</h1>
+                        <!-- Score ring -->
+                        <div class="result-score-ring">
+                            <svg width="130" height="130" viewBox="0 0 130 130">
+                                <circle cx="65" cy="65" r="56" fill="none" stroke="#e5e7eb" stroke-width="10"/>
+                                <circle cx="65" cy="65" r="56" fill="none" stroke="#4f46e5" stroke-width="10"
+                                    stroke-dasharray="351.86" stroke-dashoffset="351.86"
+                                    id="score-ring-circle" stroke-linecap="round"/>
+                            </svg>
+                            <div class="ring-num" id="result-ring-num">0</div>
+                            <div class="ring-den">/10</div>
+                        </div>
+                        <div class="quiz-result-breakdown">
+                            <div class="breakdown-card bc-correct">
+                                <div class="bc-num" id="result-correct">0</div>
+                                <div class="bc-label">✅ Đúng</div>
+                            </div>
+                            <div class="breakdown-card bc-wrong">
+                                <div class="bc-num" id="result-wrong">0</div>
+                                <div class="bc-label">❌ Sai</div>
+                            </div>
+                            <div class="breakdown-card bc-pct">
+                                <div class="bc-num" id="result-pct">0%</div>
+                                <div class="bc-label">📊 Tỉ Lệ</div>
+                            </div>
+                        </div>
+                        <div style="display:flex;gap:12px;justify-content:center;margin-top:24px;flex-wrap:wrap;">
+                            <button class="calc-btn" style="width:auto;padding:13px 28px;" onclick="retryQuiz()">🔄 Làm Lại</button>
+                            <button class="calc-btn next-btn" id="quiz-result-back-btn" style="width:auto;padding:13px 28px;" onclick="showWelcome()">⬅ Trang Chủ</button>
+                        </div>
+                        <!-- Chỉ hiện cho bài Ôn Tập/Đề Thi thường (không phải luyện theo chủ đề
+                             hay Nhiệm Vụ Hôm Nay) — khớp điều kiện saveToLeaderboard() trong quiz.js -->
+                        <button type="button" class="leaderboard-entry-btn" id="quiz-result-leaderboard-btn" style="display:none;" onclick="openLeaderboard()">🏆 Xem Bảng Xếp Hạng</button>
+                    </div>
+                </div>
+
+            </div>
+
+        </main>
+    </div>
+
+    <!-- ===== MODAL GIỚI THIỆU LẦN ĐẦU (ONBOARDING) ===== -->
+    <!-- ===== MODAL BẢNG XẾP HẠNG LỚP HỌC ===== -->
+    <div class="modal-overlay" id="leaderboard-modal" onclick="closeLeaderboard(event)">
+        <div class="modal-box" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <span class="modal-title">🏆 Bảng Xếp Hạng Lớp Học</span>
+                <button class="modal-close" onclick="closeLeaderboard()" aria-label="Đóng">✕</button>
+            </div>
+            <p class="stats-note">📌 Đây là bảng xếp hạng <strong>chung của tất cả học sinh</strong>, đồng bộ qua tài khoản — dù đổi thiết bị, điểm của bạn vẫn còn nguyên khi đăng nhập lại.</p>
+            <div class="lb-filter">
+                <button class="fc-filter-btn active" data-level="all" onclick="filterLeaderboard('all', this)">Tất Cả</button>
+                <button class="fc-filter-btn" data-level="lop1" onclick="filterLeaderboard('lop1', this)">Lớp 1</button>
+                <button class="fc-filter-btn" data-level="lop2" onclick="filterLeaderboard('lop2', this)">Lớp 2</button>
+                <button class="fc-filter-btn" data-level="lop3" onclick="filterLeaderboard('lop3', this)">Lớp 3</button>
+                <button class="fc-filter-btn" data-level="lop4" onclick="filterLeaderboard('lop4', this)">Lớp 4</button>
+                <button class="fc-filter-btn" data-level="lop5" onclick="filterLeaderboard('lop5', this)">Lớp 5</button>
+            </div>
+            <div class="lb-list" id="leaderboard-list"></div>
+            <button class="calc-btn" style="margin-top:14px;background:linear-gradient(135deg,#dc2626,#991b1b);" onclick="clearLeaderboard()">🗑️ Xóa Bảng Xếp Hạng</button>
+        </div>
+    </div>
+
+    <!-- ===== MODAL NHẮC NGHỈ GIẢI LAO ===== -->
+    <div class="modal-overlay break-reminder-overlay" id="break-reminder-overlay">
+        <div class="modal-box break-reminder-box" onclick="event.stopPropagation()">
+            <div class="break-emoji-wrap">
+                <span class="break-emoji">🦉</span>
+                <div class="break-rings">
+                    <div class="break-ring break-ring-1"></div>
+                    <div class="break-ring break-ring-2"></div>
+                </div>
+            </div>
+            <h2 class="break-title">Nghỉ Giải Lao Một Chút Nhé! 🌿</h2>
+            <p class="break-msg">Bống mỏi mắt rồi! Mình đứng dậy vươn vai một chút nhé!</p>
+            <div class="break-tips">
+                <div class="break-tip">👀 Nhìn ra xa ít nhất 20 giây</div>
+                <div class="break-tip">🙆 Vươn tay và lắc cổ nhẹ nhàng</div>
+                <div class="break-tip">💧 Uống một ngụm nước mát</div>
+            </div>
+            <div class="break-actions">
+                <button class="calc-btn" id="break-ok-btn" onclick="dismissBreak(false)">Mình Sẵn Sàng Rồi! 💪</button>
+                <button class="break-snooze-btn" onclick="dismissBreak(true)">⏰ Snooze 5 phút</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== MODAL NHẬP TÊN TRƯỚC KHI LÀM BÀI (dùng cho bảng xếp hạng) ===== -->
+    <div class="modal-overlay" id="name-prompt-modal">
+        <div class="modal-box" style="max-width:360px;" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <span class="modal-title">👋 Bạn Tên Gì?</span>
+            </div>
+            <p style="font-size:0.85rem;color:var(--text-3);margin-bottom:14px;">Nhập tên để lưu điểm vào Bảng Xếp Hạng Lớp Học (có thể bỏ trống nếu không muốn tham gia).</p>
+            <input type="text" id="student-name-input" placeholder="Tên của bạn..." style="width:100%;padding:12px 16px;border:2px solid var(--border);border-radius:var(--r-md);font-size:1rem;font-weight:700;margin-bottom:14px;box-sizing:border-box;">
+            <button class="calc-btn" onclick="confirmStudentName()">Bắt Đầu Làm Bài 🚀</button>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="onboarding-modal">
+        <div class="modal-box onboarding-box" onclick="event.stopPropagation()">
+            <div class="onboarding-header">
+                <span class="onboarding-logo" id="onboarding-mascot"></span>
+                <h2>Chào bạn! Mình là Bống 🐼</h2>
+                <p>Mình sẽ học Toán cùng bạn — vui lắm luôn, cùng xem nhé:</p>
+            </div>
+            <div class="onboarding-features">
+                <div class="ob-feature"><span class="ob-icon">🌸</span><div><strong>Vừa Học Vừa Chơi</strong><br>Cộng trừ có hoa có quả, hình học có hình vẽ thật — không phải chỉ đọc chữ.</div></div>
+                <div class="ob-feature"><span class="ob-icon">✍️</span><div><strong>Tự Làm, Tự Chấm</strong><br>Bạn gõ đáp số của mình, Bống chấm luôn và giải thích cách làm nếu sai.</div></div>
+                <div class="ob-feature"><span class="ob-icon">🎈</span><div><strong>Chọn Đúng Lớp Của Bạn</strong><br>Từ Lớp 1 đến Lớp 5, chọn lớp mình đang học ở khung bên trái nhé.</div></div>
+                <div class="ob-feature"><span class="ob-icon">🏆</span><div><strong>Sưu Tầm Ngôi Sao</strong><br>Làm đúng nhiều câu để lên bảng xếp hạng và mở khóa huy hiệu thật xịn!</div></div>
+            </div>
+            <button class="calc-btn" onclick="closeOnboarding()">Học Cùng Bống Ngay 🚀</button>
+        </div>
+    </div>
+
+
+    <script src="svg-shapes.js"></script>
+    <script src="mascot.js"></script>
+    <script src="forest-friends.js"></script>
+    <script src="practice-engine.js"></script>
+    <script src="curriculum.js"></script>
+    <script src="app-core.js"></script>
+    <script src="quiz.js"></script>
+    <script src="extras.js"></script>
+    <script src="story-arc.js"></script>
+    <script src="db-sync.js"></script>
+    <script src="auth-ui.js"></script>
+    <script src="usage-guard.js"></script>
+ 
+</body>
+
+</html>
